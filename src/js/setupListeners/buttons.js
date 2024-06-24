@@ -47,14 +47,8 @@ export function handleMaximizeButtonClicks(when) {
   when('.maximize-button', renderMaximizedTextbox);
 }
 
-export function setupInfoButtons() {
-  document.getElementById('helpInfoButton').addEventListener('click', () => {
-    renderInfoModal(helpFile);
-  });
-  document.getElementById('termsInfoButton').addEventListener('click', () => {
-    renderInfoModal(termsFile);
-  });
-  document.getElementById('privacyInfoButton').addEventListener('click', () => {
-    renderInfoModal(privacyFile);
-  });
+export function handleInfoButtonClicks(when) {
+  when('#helpInfoButton', () => renderInfoModal(helpFile));
+  when('#termsInfoButton', () => renderInfoModal(termsFile));
+  when('#privacyInfoButton', () => renderInfoModal(privacyFile));
 }

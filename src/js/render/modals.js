@@ -30,7 +30,7 @@ export function renderIPATable(ipaTableButton) {
 
   document.body.appendChild(modalElement);
 
-  setupIPAFields();
+  setupIPAFields(modalElement);
   setupIPATable(modalElement, textBox);
 }
 

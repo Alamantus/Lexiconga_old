@@ -3,16 +3,14 @@ import { removeTags } from '../../helpers';
 import { getHomonymnNumber, hasToken } from '../utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from '../search';
 import {
-  setupWordOptionButtons,
   // setupPagination,
-  setupWordOptionSelections,
-  setupWordEditFormButtons,
 } from '../setupListeners/words';
 // import { getPaginationData } from '../pagination';
 import { getOpenEditForms, translateOrthography, parseReferences, getWordReferenceMarkdown } from '../wordManagement';
 import { getPublicLink } from '../account/utilities';
 import { renderPartsOfSpeech } from './details';
 import { renderTemplateSelectOptions } from './settings';
+import { setupIPAFields } from '../setupListeners';
 
 export function renderWord(savedWord, isPublic) {
   const word = highlightSearchTerm({
@@ -43,8 +41,8 @@ export function renderWord(savedWord, isPublic) {
       ${isPublic ? `<a class="small button share-link" href="${shareLink}" target="_blank" title="Public Link to Word">&#10150;</a>` : ''}
       <span class="small button word-option-button">Options</span>
       <div class="word-option-list" style="display:none;">
-        <div class="word-option" id="edit_${word.wordId}">Edit</div>
-        <div class="word-option" id="delete_${word.wordId}">Delete</div>
+        <div class="word-option word-option-edit" id="edit_${word.wordId}">Edit</div>
+        <div class="word-option word-option-delete" id="delete_${word.wordId}">Delete</div>
       </div>
     </header>
     <dl>
@@ -116,12 +114,9 @@ export function renderWords() {
     openEditForms.forEach(editForm => {
       const entryElement = document.getElementById(editForm.id);
       entryElement.parentNode.replaceChild(editForm, entryElement);
+      setupIPAFields(editForm);
     });
-    setupWordEditFormButtons();
   }
-
-  setupWordOptionButtons();
-  setupWordOptionSelections();
 
   // Show Search Results
   const searchTerm = getSearchTerm();
@@ -206,7 +201,6 @@ export function renderEditForm(wordId = false) {
     </form>`;
 
     document.getElementById(wordId.toString()).innerHTML = editForm;
-    setupWordEditFormButtons();
     renderPartsOfSpeech(true);
     renderTemplateSelectOptions();
   }

@@ -2,9 +2,9 @@ import { usePhondueDigraphs } from '../KeyboardFire/phondue/ipaField';
 import { enableHotKeys } from '../hotkeys';
 import { dismiss } from '../announcements';
 import { handleDetailClicks, setupEditFormInteractions } from './details';
-import { setupWordForm, setupMobileWordFormButton } from './words';
-import { setupInfoButtons, handleIPAButtonClicks, handleMaximizeButtonClicks } from './buttons';
-import { handleTemplateFormClicks, setupTemplateChangeEvents, setupTemplateSelectOptions } from './settings';
+import { setupWordForm, handleWordFormClicks, handleWordOptionClicks, handleWordEditFormButtonClicks } from './words';
+import { setupInfoButtons, handleIPAButtonClicks, handleMaximizeButtonClicks, handleInfoButtonClicks, handleHeaderButtonClicks } from './buttons';
+import { setupTemplateChangeEvents, setupTemplateSelectOptions } from './settings';
 import { setupSearchBarEvents } from './search';
 
 export default function setupListeners() {
@@ -13,9 +13,8 @@ export default function setupListeners() {
   setupEditFormInteractions();
   setupTemplateChangeEvents();
   setupSearchBarEvents();
-
   setupWordForm();
-  setupMobileWordFormButton();
+
   setupInfoButtons();
   setupTemplateSelectOptions();
   if (window.settings.useHotkeys) {
@@ -26,15 +25,19 @@ export default function setupListeners() {
 function handleClickEvents(event) {
   const when = (selector, cb) => {
     if (event.target.matches(selector)) {
-      cb(event.target);
+      cb(event);
     }
   };
 
   handleClickAccouncementClose(when);
+  handleHeaderButtonClicks(when);
   handleDetailClicks(when);
-  handleTemplateFormClicks(when);
+  handleWordFormClicks(when);
+  handleWordOptionClicks(when);
+  handleWordEditFormButtonClicks(when);
   handleIPAButtonClicks(when);
   handleMaximizeButtonClicks(when);
+  handleInfoButtonClicks(when);
 }
 
 /**
@@ -42,8 +45,8 @@ function handleClickEvents(event) {
  * @param {Function} when Passed from setupListeners, which listens to clicks on document.body
  */
 function handleClickAccouncementClose(when) {
-  when('.announcement .close-button', closeElement => {
-    dismiss(closeElement.parentElement);
+  when('.announcement .close-button', event => {
+    dismiss(event.target.parentElement);
   });
 }
 

@@ -20,7 +20,8 @@ export function handleDetailClicks(when) {
   when('#deleteDictionaryButton', confirmDeleteDictionary);
 }
 
-function handleClickTab(tabElement) {
+function handleClickTab(event) {
+  const tabElement = event.target;
   const section = tabElement.innerText.toLowerCase();
   if (section === 'edit') {
     openEditModal();
@@ -37,7 +38,8 @@ function handleClickTab(tabElement) {
   }
 }
 
-function handleClickEditFormTab(tabElement) {
+function handleClickEditFormTab(event) {
+  const tabElement = event.target;
   document.querySelectorAll('#editModal nav li').forEach(t => {
     t.classList.remove('active');
     document.getElementById('edit' + t.innerText + 'Tab').style.display = 'none';
