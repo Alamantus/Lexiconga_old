@@ -148,8 +148,8 @@ export function renderWords() {
 //   }
 // }
 
-export function renderEditForm(wordId = false) {
-  wordId = typeof wordId.target === 'undefined' ? wordId : parseInt(this.id.replace('edit_', ''));
+export function renderEditForm(event = false) {
+  const wordId = typeof event.target === 'undefined' ? event : parseInt(event.target.id.replace('edit_', ''));
   const word = window.currentDictionary.words.find(w => w.wordId === wordId);
   if (word) {
     const escapeQuotes = (value) => value.replace(/"/g, '&quot;');

@@ -3,7 +3,7 @@ import { enableHotKeys } from '../hotkeys';
 import { dismiss } from '../announcements';
 import { handleDetailClicks, setupEditFormInteractions } from './details';
 import { setupWordForm, handleWordFormClicks, handleWordOptionClicks, handleWordEditFormButtonClicks } from './words';
-import { setupInfoButtons, handleIPAButtonClicks, handleMaximizeButtonClicks, handleInfoButtonClicks, handleHeaderButtonClicks } from './buttons';
+import { handleIPAButtonClicks, handleMaximizeButtonClicks, handleInfoButtonClicks, handleHeaderButtonClicks } from './buttons';
 import { setupTemplateChangeEvents, setupTemplateSelectOptions } from './settings';
 import { setupSearchBarEvents } from './search';
 
@@ -15,7 +15,6 @@ export default function setupListeners() {
   setupSearchBarEvents();
   setupWordForm();
 
-  setupInfoButtons();
   setupTemplateSelectOptions();
   if (window.settings.useHotkeys) {
     enableHotKeys();

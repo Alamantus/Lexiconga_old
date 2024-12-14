@@ -164,17 +164,21 @@ export function getWordReferenceMarkdown(reference) {
   return reference;
 }
 
-export function expandAdvancedForm(id = false) {
-  const wordId = typeof id.target !== 'undefined' ? this.id.replace('expandAdvancedForm', '') : id;
-  const button = typeof id.target !== 'undefined' ? this : document.getElementById('expandAdvancedForm' + (!wordId ? '' : wordId)),
+let expandAdvancedFormTimeout = null;
+export function expandAdvancedForm(event = false) {
+  const wordId = typeof event.target !== 'undefined' ? event.target.id.replace('expandAdvancedForm', '') : event;
+  const button = typeof event.target !== 'undefined' ? event.target : document.getElementById('expandAdvancedForm' + (!wordId ? '' : wordId)),
     form = document.getElementById('advancedForm' + (!wordId ? '' : wordId));
-  if (form.style.display !== 'block') {
-    button.innerText = 'Hide Advanced Fields';
-    form.style.display = 'block';
-  } else {
-    button.innerText = 'Show Advanced Fields';
-    form.style.display = 'none';
-  }
+  clearTimeout(expandAdvancedFormTimeout);
+  expandAdvancedFormTimeout = setTimeout(() => {
+    if (form.style.display !== 'block') {
+      button.innerText = 'Hide Advanced Fields';
+      form.style.display = 'block';
+    } else {
+      button.innerText = 'Show Advanced Fields';
+      form.style.display = 'none';
+    }
+  }, 10)
 }
 
 export function submitWordForm() {
@@ -305,8 +309,8 @@ export function updateWord(word, wordId) {
   }
 }
 
-export function confirmEditWord(id) {
-  const wordId = typeof id.target !== 'undefined' ? parseInt(this.id.replace('editWordButton_', '')) : id;
+export function confirmEditWord(event) {
+  const wordId = typeof event.target !== 'undefined' ? parseInt(event.target.id.replace('editWordButton_', '')) : event;
   const name = document.getElementById('wordName_' + wordId).value,
     pronunciation = document.getElementById('wordPronunciation_' + wordId).value,
     partOfSpeech = document.getElementById('wordPartOfSpeech_' + wordId).value,
@@ -345,8 +349,8 @@ export function confirmEditWord(id) {
   }
 }
 
-export function cancelEditWord() {
-  const wordId = parseInt(this.parentElement.id.replace('editForm_', ''));
+export function cancelEditWord(event) {
+  const wordId = parseInt(event.target.parentElement.id.replace('editForm_', ''));
   if (confirm(`Are you sure you want to cancel?\n(Any changes will be lost!)`)) {
     document.getElementById('editForm_' + wordId).classList.add('done');
     renderWords();
