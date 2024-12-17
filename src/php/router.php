@@ -1,5 +1,6 @@
 <?php
-require_once(realpath(dirname(__FILE__) . '/./api/Response.php'));
+$scriptDir = dirname(__FILE__);
+require_once(realpath($scriptDir . '/./api/Response.php'));
 $show_upgrade_screen = false;
 
 if ($show_upgrade_screen) {
@@ -8,6 +9,14 @@ if ($show_upgrade_screen) {
 }
 
 $view = isset($_GET['view']) ? $_GET['view'] : false;
+
+$scriptName = str_replace($scriptDir, '', __FILE__);
+$subdir = $_SERVER['SCRIPT_NAME'];
+$subdir = substr($subdir, 0, strrpos($subdir, $scriptName));
+$subdir = trim($subdir, '/ ');
+if (!empty($subdir)) {
+  $subdir .= '/';
+}
 
 function utf8ize($d) {
   if (is_array($d)) {
@@ -22,10 +31,11 @@ function utf8ize($d) {
 
 switch ($view) {
   case 'dictionary': {
-    $html = file_get_contents(realpath(dirname(__FILE__) . '/./template-view.html'));
+    $html = file_get_contents(realpath($scriptDir . '/./template-view.html'));
+    $html = preg_replace('/ (href|src)="\//', ' $1="/' . $subdir, $html);
     $dict = isset($_GET['dict']) ? $_GET['dict'] : false;
     if ($dict !== false) {
-      require_once(realpath(dirname(__FILE__) . '/./api/PublicDictionary.php'));
+      require_once(realpath($scriptDir . '/./api/PublicDictionary.php'));
       $dictionary = new PublicDictionary($dict);
       $dictionary_data = $dictionary->details;
       if ($dictionary_data !== false) {
@@ -48,11 +58,12 @@ switch ($view) {
     break;
   }
   case 'word': {
-    $html = file_get_contents(realpath(dirname(__FILE__) . '/./template-view.html'));
+    $html = file_get_contents(realpath($scriptDir . '/./template-view.html'));
+    $html = preg_replace('/ (href|src)="\//', ' $1="/' . $subdir, $html);
     $dict = isset($_GET['dict']) ? $_GET['dict'] : false;
     $word = isset($_GET['word']) ? $_GET['word'] : false;
     if ($dict !== false && $word !== false) {
-      require_once(realpath(dirname(__FILE__) . '/./api/PublicDictionary.php'));
+      require_once(realpath($scriptDir . '/./api/PublicDictionary.php'));
       $dictionary = new PublicDictionary($dict, true);
       $dictionary_data = $dictionary->details;
       if ($dictionary_data !== false) {
@@ -89,8 +100,9 @@ switch ($view) {
   }
 
   default: {
-    $html = file_get_contents(realpath(dirname(__FILE__) . '/./template-index.html'));
-    $announcements = file_get_contents(realpath(dirname(__FILE__) . '/./announcements.json'));
+    $html = file_get_contents(realpath($scriptDir . '/./template-index.html'));
+    $html = preg_replace('/ (href|src)="\//', ' $1="/' . $subdir, $html);
+    $announcements = file_get_contents(realpath($scriptDir . '/./announcements.json'));
     $announcements = json_decode($announcements, true);
     $announcements_html = '';
     foreach ($announcements as $announcement) {
